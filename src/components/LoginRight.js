@@ -1,11 +1,9 @@
 import React from 'react'
-
+import SignInForm from './SignIn';
 function LoginRight(props) {
     return (
         <div className="App__Form">
-           <div className="Form">
-               
-           </div>       
+           <SignInForm/>      
         </div>
     )
 }
