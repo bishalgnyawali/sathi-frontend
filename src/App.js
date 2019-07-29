@@ -1,10 +1,9 @@
 import React from 'react';
-import LogIn from './view/LogIn';
-import HomePage from './view/HomePage';
 import './css/App.css';
+import BRouter from './components/BRouter';
 function App() {
     return ( 
-        <LogIn/>
+        <BRouter/>
     );
 }
 export default App;

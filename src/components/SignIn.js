@@ -1,22 +1,23 @@
 import React, {useState,useContext} from 'react';
-//import { Link } from 'react-router-dom';
-import '../css/App.css'
+import { Link } from 'react-router-dom';
+import '../css/App.css';
+import {IsLoggedInContext} from '../context/IsLoggedIn';
 import {TokenContext} from '../context/TokenContext';
-//import HomePage from '../view/HomePage';
-
-
+//import BRoute from './BRouter'
+import Form from './Form';
 
 export default function SignInForm() {
   const [token,setToken]=useContext(TokenContext);
   const [userId,setUserId]=useState('');
   const [password,setPassword]=useState('');
+  const [isLoggedIn,setIsLoggedIn]=useContext(IsLoggedInContext);
 
   const handleChange=(e)=>{
     let target = e.target;
     let value = target.value;
     let name = target.name;
 
-    if(name=='userId'){
+    if(name==='userId'){
       setUserId(value);
     }
     else{
@@ -25,10 +26,10 @@ export default function SignInForm() {
 }
 
 
-const handleSubmit=(e)=> {
-  
+const handleSubmit=async (e)=> {
+    //setIsLoggedIn(false);
     e.preventDefault();
-    fetch('/login',{
+    await fetch('/login',{
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
@@ -36,29 +37,36 @@ const handleSubmit=(e)=> {
       },
       method: "POST",
       body: JSON.stringify({user_id:userId,password:password,})
-    }).then((result) => {
-      return result.json();
-    }).then((json) => {
-        setToken((token)=>json.token);
-        console.log('my token '+token);
+    }).then(async (result) => {
+      
+      return await result.json();
+    }).then(async (json) => {
+        setToken(()=>json.token);
+        console.log(json.token);
+        
+        if(json.token==='invalid'||json.token==="Invalid"){
+          alert('userName or Password wrong');
+          
+        }
+        else{
+          setToken(()=>json.token);
+          setIsLoggedIn(()=>true);
+          sessionStorage.setItem("isLoggedIn",true);
+          window.location.href='/homepage';
+          //props.history.push('/about');
+        }
+        //setTimeout(()=>console.log('my token '+token+isLoggedIn),0);
     }).catch((err)=>{
       console.log("my err:",err);
     })
 
-    // console.log('The form was submitted with the following data:');
-    //console.log(this.state);
-}
-  
-  
-  
-  
-  
-  
-  return (
-        
-    <div className="FormCenter">
     
-        <form onSubmit={handleSubmit} className="FormFields">
+}
+
+  return (
+    
+    <div className="FormCenter">
+        <Form onSubmit={handleSubmit} className="FormFields">
         
         <div className="FormField">
             <label className="FormField__Label" htmlFor="userId">User ID</label>
@@ -71,35 +79,10 @@ const handleSubmit=(e)=> {
           </div>
 
           <div className="FormField">
-              <button onClick={()=>{
-                  
-              }} 
+              <button type="submit"
               className="FormField__Button mr-20">Sign In</button> 
           </div>
-        </form>
+        </Form>
       </div>
-      
-      
-    );
+    )
 }
-
-/* export default class SignInForm extends Component {
-
-  //static contextType=TokenContext;
-    constructor() {
-        super();
-
-        this.state = {
-            userId: '',
-            password: '',
-        };
-
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
-
-    
-    render() {
-        
-    }
-} */
