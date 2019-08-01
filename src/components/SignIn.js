@@ -1,30 +1,35 @@
 import React, {useState,useContext} from 'react';
-import { Link } from 'react-router-dom';
+//import { Link } from 'react-router-dom';
 import '../css/App.css';
 import {IsLoggedInContext} from '../context/IsLoggedIn';
 import {TokenContext} from '../context/TokenContext';
 //import BRoute from './BRouter'
 import Form from './Form';
+import TextField  from  './TextField';
+
 
 export default function SignInForm() {
   const [token,setToken]=useContext(TokenContext);
-  const [userId,setUserId]=useState('');
-  const [password,setPassword]=useState('');
+  
   const [isLoggedIn,setIsLoggedIn]=useContext(IsLoggedInContext);
 
-  const handleChange=(e)=>{
-    let target = e.target;
-    let value = target.value;
-    let name = target.name;
+  const [userId,setUserId]=useState('');
+  const [password,setPassword]=useState('');
 
-    if(name==='userId'){
-      setUserId(value);
+    const handleChange=(e)=>{
+        let target = e.target;
+        let value = target.value;
+        let name = target.name;
+    
+        if(name==='userId'){
+          setUserId(value);
+          //console.log(userId);
+        }
+        else{
+          setPassword(value);
+          //console.log(password);
+        }
     }
-    else{
-      setPassword(value);
-    }
-}
-
 
 const handleSubmit=async (e)=> {
     //setIsLoggedIn(false);
@@ -58,30 +63,30 @@ const handleSubmit=async (e)=> {
         //setTimeout(()=>console.log('my token '+token+isLoggedIn),0);
     }).catch((err)=>{
       console.log("my err:",err);
-    })
-
-    
+    }) 
 }
 
   return (
     
     <div className="FormCenter">
         <Form onSubmit={handleSubmit} className="FormFields">
-        
-        <div className="FormField">
-            <label className="FormField__Label" htmlFor="userId">User ID</label>
-            <input type="text" id="userId" className="FormField__Input" placeholder="Enter your USER ID" name="userId" value={userId} onChange={handleChange} />
-          </div>
+            <div className="FormField">
+                <TextField type="text" id="userId" className="FormField__Input" placeholder="Enter your USER ID" name="userId" value={userId} onChange={handleChange}>
+                    User ID
+                </TextField>
+            </div>
 
-          <div className="FormField">
-            <label className="FormField__Label" htmlFor="password">Password</label>
-            <input type="password" id="password" className="FormField__Input" placeholder="Enter your password" name="password" value={password} onChange={handleChange} />
-          </div>
+            <div className="FormField">
+              <TextField type="password" id="password" placeholder="Enter your password" name="password" value={password} onChange={handleChange}>
+                  Password
+              </TextField>
+            </div>
 
-          <div className="FormField">
-              <button type="submit"
-              className="FormField__Button mr-20">Sign In</button> 
-          </div>
+            <div className="FormField">
+                <button type="submit" className="FormField__Button mr-20">
+                  Sign In
+                </button> 
+            </div>
         </Form>
       </div>
     )

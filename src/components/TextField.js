@@ -1,12 +1,16 @@
-import React from 'react'
+import React,{useState} from 'react';
+import '../css/App.css';
 
-export default function (props) {
+export default function TextField(props) {
+
+  
     return (
-        <div>
-            <label className={props.className} htmlFor={props.htmlFor}>{props.name}</label>
-            <text type={props.type} id={props.id} className={props.iClassName} placeHolder={props.placeHolder}
-                value={props.value} onChange={props.onChange}
+        <>
+            <label className="FormField__Label" htmlFor={props.id}>{props.children}</label>
+            <input type={props.type} id={props.id} className="FormField__Input" 
+                  placeholder={props.placeholder} name={props.name} 
+                  value={props.value} onChange={props.onChange}
             />
-        </div>
+        </>
     )
 }
